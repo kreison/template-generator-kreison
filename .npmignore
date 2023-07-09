@@ -3,3 +3,8 @@ package-lock.json
 src
 .vscode/**
 templates/**
+.editorconfig
+.eslintignore
+.eslintrc.json
+.gitignore
+tsconfig.json

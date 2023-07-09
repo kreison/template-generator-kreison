@@ -1,6 +1,6 @@
 {
   "name": "template-generator-kreison",
-  "version": "0.0.9",
+  "version": "0.1.0",
   "main": "dist/index.js",
   "scripts": {
     "start": "ts-node src/index.ts",
