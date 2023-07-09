@@ -1,5 +1,4 @@
 #!/usr/bin/env node
-import * as template from './utils/template';
 import inquirer from 'inquirer';
 import * as shell from 'shelljs';
 import chalk from 'chalk';
@@ -163,9 +162,7 @@ function createDirectoryContents(templatePath: string, projectName: string, conf
     if (SKIP_FILES.indexOf(file) > -1) return;
 
     if (stats.isFile()) {
-      let contents = fs.readFileSync(origFilePath, 'utf8');
-
-      contents = template.render(contents, { projectName });
+      const contents = fs.readFileSync(origFilePath, 'utf8');
 
       const writePath = path.join(CURR_DIR, projectName, file);
 
