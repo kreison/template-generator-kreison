@@ -8,11 +8,8 @@ on:
     types: [created]
 
 jobs:
-  publish-gpr:
+  build:
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      packages: write
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
