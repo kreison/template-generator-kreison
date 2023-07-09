@@ -1,12 +1,12 @@
 #!/usr/bin/env node
-
-import * as inquirer from 'inquirer';
-import * as fs from 'fs';
-import * as path from 'path';
-import * as shell from 'shelljs';
 import * as template from './utils/template';
+import inquirer from 'inquirer';
+import * as shell from 'shelljs';
 import chalk from 'chalk';
-import * as yargs from 'yargs';
+import { argv } from 'yargs';
+import * as path from 'path';
+import * as fs from 'fs';
+
 
 const CHOICES = fs.readdirSync(path.join(__dirname, 'templates'));
 
@@ -16,18 +16,17 @@ const QUESTIONS = [
     type: 'list',
     message: 'What project template would you like to generate?',
     choices: CHOICES,
-    when: () => !yargs.argv['template']
-  },
-  {
+    when: (): boolean => !argv[ 'template' ],
+  }, {
     name: 'name',
     type: 'input',
     message: 'Project name:',
-    when: () => !yargs.argv['name'],
+    when: () => !argv[ 'name' ],
     validate: (input: string) => {
       if (/^([A-Za-z\-\_\d])+$/.test(input)) return true;
       else return 'Project name may only include letters, numbers, underscores and hashes.';
-    }
-  }
+    },
+  },
 ];
 
 const CURR_DIR = process.cwd();
@@ -48,10 +47,10 @@ export interface CliOptions {
 inquirer.prompt(QUESTIONS)
   .then((answers: any) => {
 
-    answers = Object.assign({}, answers, yargs.argv);
+    answers = Object.assign({}, answers, argv);
 
-    const projectChoice = answers['template'];
-    const projectName = answers['name'];
+    const projectChoice = answers[ 'template' ];
+    const projectName = answers[ 'name' ];
     const templatePath = path.join(__dirname, 'templates', projectChoice);
     const tartgetPath = path.join(CURR_DIR, projectName);
     const templateConfig = getTemplateConfig(templatePath);
@@ -61,8 +60,8 @@ inquirer.prompt(QUESTIONS)
       templateName: projectChoice,
       templatePath,
       tartgetPath,
-      config: templateConfig
-    }
+      config: templateConfig,
+    };
 
     if (!createProject(tartgetPath)) {
       return;
@@ -151,13 +150,13 @@ function postProcessNode(options: CliOptions) {
   return true;
 }
 
-const SKIP_FILES = ['node_modules', '.template.json'];
+const SKIP_FILES = [ 'node_modules', '.template.json' ];
 
 function createDirectoryContents(templatePath: string, projectName: string, config: TemplateConfig) {
   const filesToCreate = fs.readdirSync(templatePath);
-  
+
   filesToCreate.forEach(file => {
-    const origFilePath = path.join(templatePath, file);    
+    const origFilePath = path.join(templatePath, file);
     // get stats about the current file
     const stats = fs.statSync(origFilePath);
 
@@ -169,7 +168,7 @@ function createDirectoryContents(templatePath: string, projectName: string, conf
       contents = template.render(contents, { projectName });
 
       const writePath = path.join(CURR_DIR, projectName, file);
-      
+
       fs.writeFileSync(writePath, contents, 'utf8');
     } else if (stats.isDirectory()) {
       fs.mkdirSync(path.join(CURR_DIR, projectName, file));
@@ -178,27 +177,27 @@ function createDirectoryContents(templatePath: string, projectName: string, conf
       createDirectoryContents(path.join(templatePath, file), path.join(projectName, file), config);
     }
   });
-  createGitIgnoreFile(path.join(CURR_DIR, projectName, '.gitignore'))
-  createEnvFile(path.join(CURR_DIR, projectName, '.env'))
+  createGitIgnoreFile(path.join(CURR_DIR, projectName, '.gitignore'));
+  createEnvFile(path.join(CURR_DIR, projectName, '.env'));
 }
 
-function createGitIgnoreFile(writePath: string){
+function createGitIgnoreFile(writePath: string) {
   fs.writeFileSync(
-    writePath, 
+    writePath,
     gitignoreContent,
-    'utf8'
-  )
+    'utf8',
+  );
 }
-function createEnvFile(writePath: string){
+function createEnvFile(writePath: string) {
   fs.writeFileSync(
-    writePath, 
+    writePath,
     '',
-    'utf8'
-  )
+    'utf8',
+  );
 }
 
 
-var gitignoreContent = 
+var gitignoreContent =
 `
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
@@ -227,4 +226,4 @@ yarn-error.log*
 .env
 
 package-lock.json
-`
+`;
