@@ -8,3 +8,4 @@ templates/**
 .eslintrc.json
 .gitignore
 tsconfig.json
+.github/*
