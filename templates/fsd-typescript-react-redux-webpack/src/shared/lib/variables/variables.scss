@@ -1,0 +1,44 @@
+:root {
+  //primary
+  --colorPrimary: #1890FF;
+  --colorPrimaryHover: #0958D9;
+  --colorPrimaryPressed: #002C8C;
+  --colorPrimaryBg: #1890FF;
+
+  //text
+  --colorText: #303030;
+
+  //backgrounds
+  --colorBorderBg: #FFFFFF;
+  --colorFillContent: #F9F9F9;
+
+  //grays
+  --colorGrey: #D9D9D9;
+  --colorGreyLight: #F5F5F5;
+  --colorGreyDark: #BFBFBF;
+
+  //errors
+  --colorError: #A64116;
+  --colorErrorHover: #A8071A;
+  --colorErrorPressed: #5C0011;
+
+  //successeds
+  --colorSuccess: #1F6E22;
+  --colorSuccessHover: #237804;
+  --colorSuccessPressed: #135200;
+
+  //warnings
+  --colorWarning: #D4B106;
+  --colorWarningHover: #AD8B00;
+  --colorWarningPressed: #876800;
+}
+
+p,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  color: var(--colorText);
+}
