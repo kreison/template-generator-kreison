@@ -5,25 +5,30 @@
   "scripts": {
     "start": "ts-node src/index.ts",
     "build": "tsc && shx rm -rf dist/templates && shx cp -r templates dist",
-    "build:start": "node dist/index.js"
+    "build:start": "node dist/index.js",
+    "lint": "eslint -c .eslintrc.json --ext .ts,.tsx .",
+    "lint:fix": "npm run lint -- --fix"
   },
   "bin": {
     "template-generator-kreison": "./dist/index.js"
   },
   "devDependencies": {
-    "@types/ejs": "^2.6.0",
+    "@types/ejs": "^3.1.2",
     "@types/inquirer": "^0.0.43",
-    "@types/node": "^10.9.4",
-    "@types/shelljs": "^0.8.0",
+    "@types/node": "^20.4.1",
+    "@types/shelljs": "^0.8.12",
     "@types/yargs": "^11.1.1",
-    "shx": "^0.3.2",
-    "ts-node": "^7.0.1",
-    "typescript": "^3.0.3"
+    "@typescript-eslint/eslint-plugin": "^5.61.0",
+    "eslint": "^8.44.0",
+    "eslint-plugin-import": "^2.27.5",
+    "shx": "^0.3.4",
+    "ts-node": "^10.9.1",
+    "typescript": "^5.1.6"
   },
   "dependencies": {
-    "ejs": "^2.6.1",
+    "ejs": "^3.1.9",
     "inquirer": "^6.2.0",
-    "shelljs": "^0.8.2",
+    "shelljs": "^0.8.5",
     "yargs": "^12.0.1"
   }
 }
