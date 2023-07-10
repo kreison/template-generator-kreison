@@ -5,10 +5,17 @@ import createProject from './utils/createProject';
 import postProcess from './utils/postProcess';
 import createDirectoryContents from './utils/createDirectoryContents';
 import { gitignoreContent } from './variables/gitignoreContent';
+import checkForLatestVersion from './utils/checkForLastVersion';
 import inquirer from 'inquirer';
 import { argv } from 'yargs';
+import semver from 'semver';
+import chalk from 'chalk';
+import shell from 'shelljs';
 import * as path from 'path';
 import * as fs from 'fs';
+
+
+const packageJson = require('./package.json');
 
 
 const CHOICES = fs.readdirSync(path.join(__dirname, 'templates'));
@@ -66,24 +73,46 @@ inquirer.prompt(QUESTIONS)
       config: templateConfig,
     };
 
-    if (!createProject(tartgetPath)) {
-      return;
-    }
+    checkForLatestVersion()
+      .catch(() => {
+        try {
+          return shell.exec('npm view template-generator-kreison version').toString().trim();
+        } catch (e) {
+          return null;
+        }
+      })
+      .then(latest => {
+        if (latest && semver.lt(packageJson.version, latest)) {
+          console.log();
+          console.error(
+            chalk.yellow(
+              // eslint-disable-next-line max-len
+              `You are running \`template-generator-kreison\` ${packageJson.version}, which is behind the latest release (${latest}).\n\n` +
+              'We recommend always using the latest version of create-react-app if possible.',
+            ),
+          );
+          console.log();
+        } else {
+          if (!createProject(tartgetPath)) {
+            return;
+          }
 
-    createDirectoryContents(templatePath, projectName, templateConfig);
+          createDirectoryContents(templatePath, projectName, templateConfig);
 
-    createGitIgnoreFile(path.join(CURR_DIR, projectName, '.gitignore'));
-    fs.writeFileSync(
-      path.join(CURR_DIR, projectName, '.env'),
-      '',
-      'utf8',
-    );
+          createGitIgnoreFile(path.join(CURR_DIR, projectName, '.gitignore'));
+          fs.writeFileSync(
+            path.join(CURR_DIR, projectName, '.env'),
+            '',
+            'utf8',
+          );
 
-    if (!postProcess(options)) {
-      return;
-    }
+          if (!postProcess(options)) {
+            return;
+          }
 
-    showMessage(options);
+          showMessage(options);
+        }
+      });
   });
 
 function createGitIgnoreFile(writePath: string) {
