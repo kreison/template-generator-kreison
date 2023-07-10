@@ -32,18 +32,6 @@ export function buildPlugins(options: BuildOptions, port: number): webpack.Webpa
     }),
     new webpack.DefinePlugin({ __IS_DEV__: isDev, 'process.env': JSON.stringify(dotenv.parsed) }),
     new ForkTsCheckerWebpackPlugin(),
-    new WebpackCompilerPlugin({
-      name: 'clear-console-plugin',
-      listeners: {
-        compileStart: (): void => {
-          clearConsole();
-          console.log();
-          console.log('\x1b[32m%s\x1b[0m', `DEV SERVER AT ----- http://${HOST_URL}:${port}`);
-          console.log();
-        },
-      },
-      stageMessages: undefined,
-    }),
     new ESLintPlugin({
       extensions: ['js',
         'mjs',
@@ -62,6 +50,18 @@ export function buildPlugins(options: BuildOptions, port: number): webpack.Webpa
 
   if (isDev) {
     plugins.push(new ReactRefreshWebpackPlugin());
+    plugins.push(new WebpackCompilerPlugin({
+      name: 'clear-console-plugin',
+      listeners: {
+        compileStart: (): void => {
+          clearConsole();
+          console.log();
+          console.log('\x1b[32m%s\x1b[0m', `DEV SERVER AT ----- http://${HOST_URL}:${port}`);
+          console.log();
+        },
+      },
+      stageMessages: undefined,
+    }));
   }
 
   return plugins;
