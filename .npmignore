@@ -7,5 +7,5 @@ templates/**
 .eslintignore
 .eslintrc.json
 .gitignore
-tsconfig.json
+/tsconfig.json
 .github/*
