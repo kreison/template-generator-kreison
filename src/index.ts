@@ -4,6 +4,7 @@ import getTemplateConfig from './utils/getTemplateConfig';
 import createProject from './utils/createProject';
 import postProcess from './utils/postProcess';
 import createDirectoryContents from './utils/createDirectoryContents';
+import { gitignoreContent } from './variables/gitignoreContent';
 import inquirer from 'inquirer';
 import { argv } from 'yargs';
 import * as path from 'path';
@@ -71,9 +72,24 @@ inquirer.prompt(QUESTIONS)
 
     createDirectoryContents(templatePath, projectName, templateConfig);
 
+    createGitIgnoreFile(path.join(CURR_DIR, projectName, '.gitignore'));
+    fs.writeFileSync(
+      path.join(CURR_DIR, projectName, '.env'),
+      '',
+      'utf8',
+    );
+
     if (!postProcess(options)) {
       return;
     }
 
     showMessage(options);
   });
+
+function createGitIgnoreFile(writePath: string) {
+  fs.writeFileSync(
+    writePath,
+    gitignoreContent,
+    'utf8',
+  );
+}

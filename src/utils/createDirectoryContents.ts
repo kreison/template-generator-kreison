@@ -1,5 +1,4 @@
 import { CURR_DIR, TemplateConfig } from '..';
-import { gitignoreContent } from '../variables/gitignoreContent';
 import path from 'path';
 import fs from 'fs';
 
@@ -26,20 +25,8 @@ function createDirectoryContents(templatePath: string, projectName: string, conf
       createDirectoryContents(path.join(templatePath, file), path.join(projectName, file), config);
     }
   });
-  createGitIgnoreFile(path.join(CURR_DIR, projectName, '.gitignore'));
-  fs.writeFileSync(
-    path.join(CURR_DIR, projectName, '.env'),
-    '',
-    'utf8',
-  );
+
 }
 
-function createGitIgnoreFile(writePath: string) {
-  fs.writeFileSync(
-    writePath,
-    gitignoreContent,
-    'utf8',
-  );
-}
 
 export default createDirectoryContents;
