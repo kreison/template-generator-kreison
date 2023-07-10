@@ -15,7 +15,7 @@ import * as path from 'path';
 import * as fs from 'fs';
 
 
-const packageJson = require('./package.json');
+const packageJson = require('../package.json');
 
 
 const CHOICES = fs.readdirSync(path.join(__dirname, 'templates'));
