@@ -1,11 +1,11 @@
-/node_modules
+node_modules
 package-lock.json
 /src
 .vscode/**
 templates/**
-.editorconfig
-.eslintignore
-.eslintrc.json
+/.editorconfig
+/.eslintignore
+/.eslintrc.json
 .gitignore
 /tsconfig.json
 .github/*
